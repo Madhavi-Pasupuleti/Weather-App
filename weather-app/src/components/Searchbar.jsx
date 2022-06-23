@@ -27,6 +27,7 @@ let Input = styled.input`
 function Searchbar() {
   return (
     <div>
+        <h1>Weather App</h1>
         <InputDiv>
             <LocationOnSharp style={{fontSize : "30px"}}/>
             <Input type="text" />

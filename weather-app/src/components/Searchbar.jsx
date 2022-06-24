@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { LocationOnSharp, SearchOutlined } from "@material-ui/icons"
+import axios from "axios"
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 let InputDiv = styled.div`
     width : 90%;
@@ -24,17 +27,80 @@ let Input = styled.input`
     border : none;
     outline : none;
 `
+let Bounce = styled.div`
+    width : 95%;
+    height : 40px;
+    margin :auto;
+    border-radius : 0px 3px;
+    display : flex;
+    justify-content: center;
+    align-items  : center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+`
+
+let id;
+let getdata
 function Searchbar() {
-  return (
-    <div>
-        <h1>Weather App</h1>
-        <InputDiv>
-            <LocationOnSharp style={{fontSize : "30px"}}/>
-            <Input type="text" />
-            <SearchOutlined style={{fontSize : "32px"}}/>
-        </InputDiv>
-    </div>
-  )
+    const [city, SetCity ] = useState("")
+    const [citydata, SetCityData] = useState([])
+
+    const getdata = async(e)=>{
+        try{
+            SetCity(e)
+            // if(city.length <= 1){
+            //     return false
+            // }
+          getdata = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=05631925d6aa0d3b6f7169ec271c626d`)
+          .then((res)=>{
+              SetCityData([res.data])
+            })
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    function debounce(func, delay){
+        if(id){
+            clearTimeout(id)
+        }
+        id = setTimeout(()=>{
+            func()
+        },delay)
+    }
+    
+    console.log("citydata",citydata)
+    
+    return (
+        <div>
+            <div>
+                <InputDiv>
+                    <LocationOnSharp style={{fontSize : "30px"}}/>
+                    <Input type="text" 
+                       onInput = {(e) => debounce(() => (getdata(e.target.value),1000))}
+                       />
+                    <SearchOutlined style={{fontSize : "32px"}}/>
+                </InputDiv>
+            </div>
+                        
+             
+                {citydata.map((e) => (
+                    <Bounce ke={e.id}>{e.name}</Bounce>
+                ))}
+            
+            
+            <div>
+                {citydata.map((ele) => (
+                    <div key={ele.id}>
+                       <h2>City : {ele.name}</h2>
+                       <h2>Temp : {ele.main.temp}</h2>
+                       <h3>Desc : {ele.weather[0].description}</h3>
+                       <p>Wind Speed : {ele.wind.speed}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
 }
 
 export default Searchbar

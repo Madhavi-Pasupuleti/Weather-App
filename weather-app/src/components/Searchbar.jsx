@@ -14,32 +14,43 @@ let InputDiv = styled.div`
     align-items : center;
     padding : 0px 10px;
     margin : auto;
-    justify-content : space-evenly;
+    justify-content : space-between;
     box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
     &:hover{
         border : 2px solid skyblue
     }
     `
 let Input = styled.input`
-    width : 80%;
+    width : 95%;
     height : 40px;
     border-radius : 10px;
     border : none;
     outline : none;
 `
 let Bounce = styled.div`
-    width : 95%;
-    height : 40px;
+    width : 90%;
+    height : 50px;
     margin :auto;
-    border-radius : 0px 3px;
+    border-radius : 10px;
     display : flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items  : center;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding : 0px 10px;
+    box-shadow: rgba(79, 55, 55, 0.24) 0px 3px 8px;
+`
+let Bdiv = styled.div`
+    width : 20%;
+    display : flex;
+    justify-content: space-around;
+`
+let Img = styled.img`
+    width : 40px;
+    height :40px;
+    padding :15px 0px;
 `
 
 let id;
-let getdata
+ 
 function Searchbar() {
     const [city, SetCity ] = useState("")
     const [citydata, SetCityData] = useState([])
@@ -47,13 +58,11 @@ function Searchbar() {
     const getdata = async(e)=>{
         try{
             SetCity(e)
-            // if(city.length <= 1){
-            //     return false
-            // }
-          getdata = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=05631925d6aa0d3b6f7169ec271c626d`)
-          .then((res)=>{
-              SetCityData([res.data])
-            })
+             
+            let getdata = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=05631925d6aa0d3b6f7169ec271c626d
+            `)
+            
+            SetCityData([getdata.data])
         }
         catch(err){
             console.log(err)
@@ -83,19 +92,24 @@ function Searchbar() {
                 </InputDiv>
             </div>
                         
-             
                 {citydata.map((e) => (
-                    <Bounce ke={e.id}>{e.name}</Bounce>
+                    <Bounce key={e.id}>
+                        <h4>{e.name}</h4>
+                        <Bdiv>
+                            <p>{e.main.temp} <br/>{e.weather[0].main}</p>
+                            <Img src="https://cdn-icons-png.flaticon.com/128/1146/1146869.png" alt=""/>
+                        </Bdiv>
+                    </Bounce>
                 ))}
-            
             
             <div>
                 {citydata.map((ele) => (
                     <div key={ele.id}>
-                       <h2>City : {ele.name}</h2>
                        <h2>Temp : {ele.main.temp}</h2>
-                       <h3>Desc : {ele.weather[0].description}</h3>
-                       <p>Wind Speed : {ele.wind.speed}</p>
+                       <h3>Pressure : {ele.main.pressure} hpa</h3>
+                       <h3>Humidity : {ele.main.humidity}%</h3>
+                       <h3>Sunrise : {ele.sys.sunrise}</h3>
+                       <h3>Sunset : {ele.sys.sunset}</h3>
                     </div>
                 ))}
             </div>
@@ -104,3 +118,5 @@ function Searchbar() {
 }
 
 export default Searchbar
+
+ 

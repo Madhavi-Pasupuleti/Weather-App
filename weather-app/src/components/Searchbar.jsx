@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { LocationOnSharp, SearchOutlined } from "@material-ui/icons"
 import axios from "axios"
 import { useState } from 'react'
-import { useEffect } from 'react'
 
 let InputDiv = styled.div`
     width : 90%;
@@ -48,6 +47,20 @@ let Img = styled.img`
     height :40px;
     padding :15px 0px;
 `
+let Wraper = styled.div`
+    display : flex;
+    width : 90%;
+    margin : auto;
+    margin-top : 50px;
+    #data{
+        width : 50%;
+    }
+    #map{
+        width : 50%;
+    }
+    
+` 
+
 
 let id;
  
@@ -55,13 +68,14 @@ function Searchbar() {
     const [city, SetCity ] = useState("")
     const [citydata, SetCityData] = useState([])
 
+    
     const getdata = async(e)=>{
         try{
             SetCity(e)
              
-            let getdata = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=05631925d6aa0d3b6f7169ec271c626d
+            let getdata = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=05631925d6aa0d3b6f7169ec271c626d
             `)
-            
+           
             SetCityData([getdata.data])
         }
         catch(err){
@@ -101,18 +115,29 @@ function Searchbar() {
                         </Bdiv>
                     </Bounce>
                 ))}
-            
-            <div>
-                {citydata.map((ele) => (
-                    <div key={ele.id}>
-                       <h2>Temp : {ele.main.temp}</h2>
-                       <h3>Pressure : {ele.main.pressure} hpa</h3>
-                       <h3>Humidity : {ele.main.humidity}%</h3>
-                       <h3>Sunrise : {ele.sys.sunrise}</h3>
-                       <h3>Sunset : {ele.sys.sunset}</h3>
-                    </div>
-                ))}
-            </div>
+            <Wraper>
+                <div id="data">
+                    {citydata.map((ele) => (
+                        <div key={ele.id}>
+                        <h2>Temp : {ele.main.temp}</h2>
+                        <h3>Pressure : {ele.main.pressure} hpa</h3>
+                        <h3>Humidity : {ele.main.humidity}%</h3>
+                        <h3>Sunrise : {ele.sys.sunrise}</h3>
+                        <h3>Sunset : {ele.sys.sunset}</h3>
+                        </div>
+                    ))}
+                </div>
+                <div id = "map">
+                    <iframe
+                    src={`https://maps.google.com/maps?q=${city}=&z=13&ie=UTF8&iwloc=&output=embed`}
+                    frameborder="0" 
+                    width="100%" 
+                    height="450" 
+                    style={{border:"0"}}
+                    >
+                    </iframe>
+                </div>
+            </Wraper>
         </div>
     )
 }

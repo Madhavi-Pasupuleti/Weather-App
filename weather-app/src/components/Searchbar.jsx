@@ -68,6 +68,25 @@ function Searchbar() {
     const [city, SetCity ] = useState("")
     const [citydata, SetCityData] = useState([])
 
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
+    const [status, setStatus] = useState(null);
+
+    const getLocation = () => {
+        if (!navigator.geolocation) {
+        setStatus('Geolocation is not supported by your browser');
+        } else {
+        setStatus('Locating...');
+        navigator.geolocation.getCurrentPosition((position) => {
+            setStatus(null);
+            setLat(position.coords.latitude);
+            setLng(position.coords.longitude);
+        }, () => {
+            setStatus('Unable to retrieve your location');
+        });
+        }
+    }
+
     
     const getdata = async(e)=>{
         try{
@@ -100,6 +119,7 @@ function Searchbar() {
                 <InputDiv>
                     <LocationOnSharp style={{fontSize : "30px"}}/>
                     <Input type="text" 
+                       placeholder='Type your city'
                        onInput = {(e) => debounce(() => (getdata(e.target.value),1000))}
                        />
                     <SearchOutlined style={{fontSize : "32px"}}/>
@@ -126,6 +146,12 @@ function Searchbar() {
                         <h3>Sunset : {ele.sys.sunset}</h3>
                         </div>
                     ))}
+                    <br />
+                    <button onClick={getLocation}>Show my location</button>
+                    <h2>Coordinates</h2>
+                    <p>{status}</p>
+                    {lat && <p>Latitude: {lat}</p>}
+                    {lng && <p>Longitude: {lng}</p>}
                 </div>
                 <div id = "map">
                     <iframe

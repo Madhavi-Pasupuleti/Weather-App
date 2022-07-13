@@ -15,10 +15,9 @@ let InputDiv = styled.div`
     padding : 0px 10px;
     margin : auto;
     justify-content : space-between;
-    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
-    &:hover{
-        border : 2px solid skyblue
-    }
+    background-color : white;
+    border : 2px solid skyblue
+    
     `
 let Input = styled.input`
     width : 95%;
@@ -26,17 +25,18 @@ let Input = styled.input`
     border-radius : 10px;
     border : none;
     outline : none;
+    
 `
 let Bounce = styled.div`
     width : 90%;
     height : 50px;
     margin :auto;
-    border-radius : 10px;
+    border-radius : 1px 1px 5px 5px;
     display : flex;
     justify-content: space-between;
     align-items  : center;
     padding : 0px 10px;
-    box-shadow: rgba(79, 55, 55, 0.24) 0px 3px 8px;
+    background-color : white;
 `
 let Bdiv = styled.div`
     width : 20%;
@@ -51,14 +51,11 @@ let Img = styled.img`
 let Days = styled.div`
     width : 80%;
     margin :auto;
-    /* border : 1px solid red; */
     .weeks{
         display : flex;
-        /* border : 1px solid pink; */
         width:100%;
         .day{
             width : 20%;
-            /* border : 1px solid green; */
             display : flex;
             align-items  :center;
             justify-content: center;
@@ -70,7 +67,6 @@ let Days = styled.div`
         margin-top : -20px;
         .fdata{
             width : 20%;
-            /* border : 1px solid blue */
         }
     }
      
@@ -173,7 +169,7 @@ function Searchbar() {
     let week = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
      
     return (
-        <div>
+        <div style={{paddingTop : "20px"}}>
             <div>
                 <InputDiv>
                     <LocationOnSharp style={{fontSize : "30px"}}/>
@@ -189,7 +185,7 @@ function Searchbar() {
                     <Bounce key={e.id}>
                         <h4>{e.name}</h4>
                         <Bdiv>
-                            <p>{e.main.temp} <br/>{e.weather[0].main}</p>
+                            <p>{e.main.temp}°C <br/>{e.weather[0].main}</p>
                             <Img src="https://cdn-icons-png.flaticon.com/128/1146/1146869.png" alt=""/>
                         </Bdiv>
                     </Bounce>
@@ -207,27 +203,37 @@ function Searchbar() {
                     <div className='fcast'>
                        {sevendays.map((ele,i,arr) => (
                             <div key={ele.id} className= "fdata">
-                                <p>Temp : {ele.main.temp}</p>
-                                <p>day : {ele.weather[0].main}</p>
+                                <p>{ele.main.temp}°C</p>
+                                <p>{ele.weather[0].main}</p>
                             </div>
                         ))}
                     </div>
                 </Days>
             <Wraper>
                 <div id="data">
+                    <div>
+                        {citydata.map((e)=> (
+                            <div>
+                                <h2>Temp : {e.main.temp}°C</h2>
+                                <h3>Pressure : {e.main.pressure} hpa</h3>
+                                <h3>Humidity : {e.main.humidity}%</h3>
+                            </div>
+                        ))}
+                    </div>
                     <br />
-                    <button onClick={getLocation}>Show my location</button>
-                    <h2>Coordinates</h2>
-                    <p>{status}</p>
-                    {lat && <p>Latitude: {lat}</p>}
-                    {lng && <p>Longitude: {lng}</p>}
+                    <div>
+                        <button onClick={getLocation} style={{padding  :"5px"}}>Show my location</button>
+                        <p>{status}</p>
+                        {lat && <p>Latitude: {lat}</p>}
+                        {lng && <p>Longitude: {lng}</p>}
+                    </div>
                 </div>
                 <div id = "map">
                     <iframe
                     src={`https://maps.google.com/maps?q=${city}=&z=13&ie=UTF8&iwloc=&output=embed`}
                     border="0" 
                     width="100%" 
-                    height="400" 
+                    height="450" 
                     style={{border:"0"}}
                     >
                     </iframe>

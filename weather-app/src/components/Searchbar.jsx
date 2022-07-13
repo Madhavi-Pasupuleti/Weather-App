@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { LocationOnSharp, SearchOutlined } from "@material-ui/icons"
+import { Fireplace, LocationOnSharp, SearchOutlined, ThumbDown, Tune } from "@material-ui/icons"
 import axios from "axios"
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 let InputDiv = styled.div`
     width : 90%;
@@ -47,6 +48,34 @@ let Img = styled.img`
     height :40px;
     padding :15px 0px;
 `
+let Days = styled.div`
+    width : 80%;
+    margin :auto;
+    /* border : 1px solid red; */
+    .weeks{
+        display : flex;
+        /* border : 1px solid pink; */
+        width:100%;
+        .day{
+            width : 20%;
+            /* border : 1px solid green; */
+            display : flex;
+            align-items  :center;
+            justify-content: center;
+           
+        }
+    }
+    .fcast{
+        display : flex;
+        margin-top : -20px;
+        .fdata{
+            width : 20%;
+            /* border : 1px solid blue */
+        }
+    }
+     
+     
+`
 let Wraper = styled.div`
     display : flex;
     width : 90%;
@@ -65,12 +94,19 @@ let Wraper = styled.div`
 let id;
  
 function Searchbar() {
-    const [city, SetCity ] = useState("")
+    const [city, SetCity ] = useState("kadapa")
     const [citydata, SetCityData] = useState([])
 
     const [lat, setLat] = useState(null);
     const [lng, setLng] = useState(null);
     const [status, setStatus] = useState(null);
+
+    const [forecast, SetForecast] = useState([]);
+    
+
+    useEffect(() => {
+        getforcast()
+    },[city])
 
     const getLocation = () => {
         if (!navigator.geolocation) {
@@ -86,21 +122,35 @@ function Searchbar() {
         });
         }
     }
-
-    
+   
     const getdata = async(e)=>{
         try{
             SetCity(e)
              
             let getdata = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=05631925d6aa0d3b6f7169ec271c626d
             `)
-           
             SetCityData([getdata.data])
         }
         catch(err){
             console.log(err)
         }
     }
+
+    const getforcast = async()=>{
+        try{
+             
+            let getfor = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=05631925d6aa0d3b6f7169ec271c626d`)
+            
+            //console.log("getcity", getfor.data.city.name)
+            SetForecast(getfor.data.list)
+            console.log("forcast",forecast)
+            
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+   
 
     function debounce(func, delay){
         if(id){
@@ -112,7 +162,16 @@ function Searchbar() {
     }
     
     console.log("citydata",citydata)
-    
+
+    let sevendays = []
+    forecast.map((e,i,arr) => {
+        if(i === 0 || i === 8 || i === 12 || i === 16 || i === 24 || i === 32 || i === 39){
+            sevendays.push(e)
+        }
+    })
+    console.log("days",sevendays)
+    let week = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+     
     return (
         <div>
             <div>
@@ -120,7 +179,7 @@ function Searchbar() {
                     <LocationOnSharp style={{fontSize : "30px"}}/>
                     <Input type="text" 
                        placeholder='Type your city'
-                       onInput = {(e) => debounce(() => (getdata(e.target.value),1000))}
+                       onInput = {(e) => debounce(() => (getdata(e.target.value),3000))}
                        />
                     <SearchOutlined style={{fontSize : "32px"}}/>
                 </InputDiv>
@@ -135,17 +194,27 @@ function Searchbar() {
                         </Bdiv>
                     </Bounce>
                 ))}
+                <br />
+                 
+                <Days>
+                    <div className='weeks'>
+                        {week.map((e) => (
+                            <div className='day'>
+                                <p>{e}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <div className='fcast'>
+                       {sevendays.map((ele,i,arr) => (
+                            <div key={ele.id} className= "fdata">
+                                <p>Temp : {ele.main.temp}</p>
+                                <p>day : {ele.weather[0].main}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Days>
             <Wraper>
                 <div id="data">
-                    {citydata.map((ele) => (
-                        <div key={ele.id}>
-                        <h2>Temp : {ele.main.temp}</h2>
-                        <h3>Pressure : {ele.main.pressure} hpa</h3>
-                        <h3>Humidity : {ele.main.humidity}%</h3>
-                        <h3>Sunrise : {ele.sys.sunrise}</h3>
-                        <h3>Sunset : {ele.sys.sunset}</h3>
-                        </div>
-                    ))}
                     <br />
                     <button onClick={getLocation}>Show my location</button>
                     <h2>Coordinates</h2>
@@ -156,9 +225,9 @@ function Searchbar() {
                 <div id = "map">
                     <iframe
                     src={`https://maps.google.com/maps?q=${city}=&z=13&ie=UTF8&iwloc=&output=embed`}
-                    frameborder="0" 
+                    border="0" 
                     width="100%" 
-                    height="450" 
+                    height="400" 
                     style={{border:"0"}}
                     >
                     </iframe>

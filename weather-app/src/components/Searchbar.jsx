@@ -203,9 +203,9 @@ function Searchbar() {
                 <div className='fcast'>
                     {sevendays.map((ele,i,arr) => (
                         <div key={ele.id} className= "fdata">
-                            <p>{ele.main.temp}°C</p>
+                            <p>{ele.main.temp}°C</p>   
                             <p>{
-                                ele.weather[0].main === "Rain" ? (<Img src="https://cdn-icons.flaticon.com/png/128/3072/premium/3072063.png?token=exp=1657794401~hmac=8cbf3f4194ab8c409b003a9bbb069f01" />)
+                                ele.weather[0].main === "Rain" ? (<Img src="https://cdn-icons-png.flaticon.com/128/4551/4551693.png" />)
                                 : (<Img src = "https://cdn-icons-png.flaticon.com/128/1163/1163573.png"/>)
                                }
                             </p>

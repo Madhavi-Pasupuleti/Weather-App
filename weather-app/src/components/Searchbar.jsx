@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Fireplace, LocationOnSharp, SearchOutlined, ThumbDown, Tune } from "@material-ui/icons"
+import { CloudOutlined, LocationOnSharp, SearchOutlined, } from "@material-ui/icons"
 import axios from "axios"
 import { useState } from 'react'
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 let InputDiv = styled.div`
     width : 90%;
@@ -39,7 +39,7 @@ let Bounce = styled.div`
     background-color : white;
 `
 let Bdiv = styled.div`
-    width : 20%;
+    width : 10%;
     display : flex;
     justify-content: space-around;
 `
@@ -180,35 +180,41 @@ function Searchbar() {
                     <SearchOutlined style={{fontSize : "32px"}}/>
                 </InputDiv>
             </div>
-                        
-                {citydata.map((e) => (
-                    <Bounce key={e.id}>
-                        <h4>{e.name}</h4>
-                        <Bdiv>
-                            <p>{e.main.temp}°C <br/>{e.weather[0].main}</p>
-                            <Img src="https://cdn-icons-png.flaticon.com/128/1146/1146869.png" alt=""/>
-                        </Bdiv>
-                    </Bounce>
-                ))}
-                <br />
+
+            {citydata.map((e) => (
+                <Bounce key={e.id}>
+                    <h4>{e.name}</h4>
+                    <Bdiv>
+                        <p style={{marginTop:"30px"}}>{e.main.temp}°C <br/> {e.weather[0].main }</p>
+                        <p>{e.weather[0].main === "Rain" ? (<Img src="https://cdn-icons-png.flaticon.com/128/826/826957.png"/>) : (<Img src="https://cdn-icons-png.flaticon.com/128/704/704845.png" />)}</p>
+                    </Bdiv>
+                </Bounce>
+            ))}
+            <br />
                  
-                <Days>
-                    <div className='weeks'>
-                        {week.map((e) => (
-                            <div className='day'>
-                                <p>{e}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <div className='fcast'>
-                       {sevendays.map((ele,i,arr) => (
-                            <div key={ele.id} className= "fdata">
-                                <p>{ele.main.temp}°C</p>
-                                <p>{ele.weather[0].main}</p>
-                            </div>
-                        ))}
-                    </div>
-                </Days>
+            <Days>
+                <div className='weeks'>
+                    {week.map((e) => (
+                        <div className='day'>
+                            <p>{e}</p>
+                        </div>
+                    ))}
+                </div>
+                <div className='fcast'>
+                    {sevendays.map((ele,i,arr) => (
+                        <div key={ele.id} className= "fdata">
+                            <p>{ele.main.temp}°C</p>
+                            <p>{
+                                ele.weather[0].main === "Rain" ? (<Img src="https://cdn-icons.flaticon.com/png/128/3072/premium/3072063.png?token=exp=1657794401~hmac=8cbf3f4194ab8c409b003a9bbb069f01" />)
+                                : (<Img src = "https://cdn-icons-png.flaticon.com/128/1163/1163573.png"/>)
+                               }
+                            </p>
+                            <p style={{marginTop:"-30px"}}>{ele.weather[0].main}</p>
+                        </div>
+                    ))}
+                </div>
+            </Days>
+
             <Wraper>
                 <div id="data">
                     <div>
@@ -239,6 +245,7 @@ function Searchbar() {
                     </iframe>
                 </div>
             </Wraper>
+
         </div>
     )
 }

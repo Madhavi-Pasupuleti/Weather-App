@@ -38,6 +38,7 @@ let Bounce = styled.div`
     align-items  : center;
     padding : 0px 10px;
     background-color : white;
+    cursor: pointer;
 `
 let Bdiv = styled.div`
     width : 10%;
@@ -99,15 +100,22 @@ function Searchbar() {
     const [status, setStatus] = useState(null);
 
     const [forecast, SetForecast] = useState([]);
-    const [debounceData, SetDebounceData] = useState([])
+    const [debounceArr, SetDebounceArr] = useState([])
+    const [cityforecast, SetCityForecast] = useState("kadapa")
     
 
     useEffect(() => {
-        let res = cities.filter((ele,i,arr) => {return (ele[0].toLowerCase() === city)})
-            //console.log("res", res)
-        SetDebounceData(res)
-
+    
         getforcast()
+    
+    },[cityforecast])
+
+    useEffect(() => {
+        let res = cities.filter((ele) => {
+            return (ele.slice(0, city.length).toLowerCase() === city)
+        })
+            SetDebounceArr(res)
+
     },[city])
     
     const getLocation = () => {
@@ -128,11 +136,9 @@ function Searchbar() {
    
     const getdata = async(e)=>{
         try{
+            
             SetCity(e)
-             
-            let getdata = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=05631925d6aa0d3b6f7169ec271c626d
-            `)
-            SetCityData([getdata.data])
+            
         }
         catch(err){
             console.log(err)
@@ -142,10 +148,12 @@ function Searchbar() {
     const getforcast = async()=>{
         try{
              
-            let getfor = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=05631925d6aa0d3b6f7169ec271c626d`)
+            let getfor = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${cityforecast}&units=metric&appid=0e91ea9816665abc67fcec0febec0f7b`)
             
             //console.log("getcity", getfor.data.city.name)
+             
             SetForecast(getfor.data.list)
+            SetCityData([getfor.data.list[0]])
             console.log("forcast",forecast)
             
         }
@@ -172,8 +180,10 @@ function Searchbar() {
             sevendays.push(e)
         }
     })
-    console.log("days",sevendays)
+     
     let week = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+    console.log("setcity", cityforecast)
+     
      
     return (
         <div style={{paddingTop : "20px"}}>
@@ -187,9 +197,10 @@ function Searchbar() {
                     <SearchOutlined style={{fontSize : "32px"}}/>
                 </InputDiv>
             </div>
-
-            {debounceData.map((e) => (
-               <Bounce>
+            
+             
+            {debounceArr.map((e) => (
+               <Bounce onClick = {() => SetCityForecast(e)}>
                   <p>{e}</p>
                </Bounce>
               
@@ -227,7 +238,7 @@ function Searchbar() {
                                 <h3>Pressure : {e.main.pressure} hpa</h3>
                                 <h3>Humidity : {e.main.humidity}%</h3>
                             </div>
-                        ))}
+                        ))} 
                     </div>
                     <br />
                     <div>
@@ -239,13 +250,12 @@ function Searchbar() {
                 </div>
                 <div id = "map">
                     <iframe
-                    src={`https://maps.google.com/maps?q=${city}=&z=13&ie=UTF8&iwloc=&output=embed`}
-                    border="0" 
-                    width="100%" 
-                    height="450" 
-                    style={{border:"0"}}
-                    >
-                    </iframe>
+                        src={`https://maps.google.com/maps?q=${cityforecast}=&z=13&ie=UTF8&iwloc=&output=embed`}
+                        border="0" 
+                        width="100%" 
+                        height="450" 
+                        style={{border:"0"}}
+                    ></iframe>
                 </div>
             </Wraper>
 
@@ -254,3 +264,4 @@ function Searchbar() {
 }
 
 export default Searchbar
+

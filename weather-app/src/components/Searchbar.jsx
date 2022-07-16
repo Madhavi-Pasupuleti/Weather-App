@@ -88,7 +88,7 @@ let Wraper = styled.div`
     
 ` 
 
-
+let count = 0
 let id;
  
 function Searchbar() {
@@ -138,7 +138,7 @@ function Searchbar() {
         try{
             
             SetCity(e)
-            
+            count = 0
         }
         catch(err){
             console.log(err)
@@ -183,7 +183,12 @@ function Searchbar() {
      
     let week = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
     console.log("setcity", cityforecast)
-     
+
+    
+     const handledisplay = () =>{
+        count = 1
+        console.log(count)
+    }
      
     return (
         <div style={{paddingTop : "20px"}}>
@@ -198,13 +203,15 @@ function Searchbar() {
                 </InputDiv>
             </div>
             
-             
-            {debounceArr.map((e) => (
-               <Bounce onClick = {() => SetCityForecast(e)}>
-                  <p>{e}</p>
-               </Bounce>
-              
-            ))}
+             {count === 0 &&
+                <div>
+                    {debounceArr.map((e) => (
+                    <Bounce onClick = {() => (SetCityForecast(e), handledisplay())}>
+                        <p>{e}</p>
+                    </Bounce>  
+                    ))}
+                </div>
+            }
             <br />
             <Days>
                 <div className='weeks'>

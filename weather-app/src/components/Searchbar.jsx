@@ -4,6 +4,7 @@ import { CloudOutlined, LocationOnSharp, SearchOutlined, } from "@material-ui/ic
 import axios from "axios"
 import { useState } from 'react'
 import { useEffect } from 'react';
+import {cities}from "../db"
 
 let InputDiv = styled.div`
     width : 90%;
@@ -98,12 +99,17 @@ function Searchbar() {
     const [status, setStatus] = useState(null);
 
     const [forecast, SetForecast] = useState([]);
+    const [debounceData, SetDebounceData] = useState([])
     
 
     useEffect(() => {
+        let res = cities.filter((ele,i,arr) => {return (ele[0].toLowerCase() === city)})
+            //console.log("res", res)
+        SetDebounceData(res)
+
         getforcast()
     },[city])
-
+    
     const getLocation = () => {
         if (!navigator.geolocation) {
         setStatus('Geolocation is not supported by your browser');
@@ -118,6 +124,7 @@ function Searchbar() {
         });
         }
     }
+
    
     const getdata = async(e)=>{
         try{
@@ -181,17 +188,13 @@ function Searchbar() {
                 </InputDiv>
             </div>
 
-            {citydata.map((e) => (
-                <Bounce key={e.id}>
-                    <h4>{e.name}</h4>
-                    <Bdiv>
-                        <p style={{marginTop:"30px"}}>{e.main.temp}°C <br/> {e.weather[0].main }</p>
-                        <p>{e.weather[0].main === "Rain" ? (<Img src="https://cdn-icons-png.flaticon.com/128/826/826957.png"/>) : (<Img src="https://cdn-icons-png.flaticon.com/128/704/704845.png" />)}</p>
-                    </Bdiv>
-                </Bounce>
+            {debounceData.map((e) => (
+               <Bounce>
+                  <p>{e}</p>
+               </Bounce>
+              
             ))}
             <br />
-                 
             <Days>
                 <div className='weeks'>
                     {week.map((e) => (
@@ -251,5 +254,3 @@ function Searchbar() {
 }
 
 export default Searchbar
-
- 

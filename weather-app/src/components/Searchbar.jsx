@@ -17,7 +17,8 @@ let InputDiv = styled.div`
     margin : auto;
     justify-content : space-between;
     background-color : white;
-    border : 2px solid skyblue
+    border : 2px solid skyblue;
+    
     
     `
 let Input = styled.input`
@@ -26,19 +27,21 @@ let Input = styled.input`
     border-radius : 10px;
     border : none;
     outline : none;
-    
+
 `
 let Bounce = styled.div`
-    width : 90%;
+    /* width : 90%; */
     height : 50px;
     margin :auto;
-    border-radius : 1px 1px 5px 5px;
+    border-radius : 1px ;
     display : flex;
     justify-content: space-between;
     align-items  : center;
+    border-bottom : 0.5px solid lightgrey;
     padding : 0px 10px;
     background-color : white;
     cursor: pointer;
+    
 `
 let Bdiv = styled.div`
     width : 10%;
@@ -204,12 +207,15 @@ function Searchbar() {
             </div>
             
              {count === 0 &&
-                <div>
-                    {debounceArr.map((e) => (
-                    <Bounce onClick = {() => (SetCityForecast(e), handledisplay())}>
+                <div style={{ height : "200px", width : "91%", overflow : "auto", margin : "auto"}}>
+                    {debounceArr.map((e) => (   
+                        <Bounce onClick = {() => (SetCityForecast(e), handledisplay())}>
                         <p>{e}</p>
-                    </Bounce>  
-                    ))}
+                        <Bdiv>
+                        <LocationOnSharp style={{fontSize : "20px"}}/>
+                        </Bdiv>     
+                        </Bounce>    
+                        ))}
                 </div>
             }
             <br />

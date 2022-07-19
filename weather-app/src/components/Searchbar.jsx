@@ -27,7 +27,8 @@ let Input = styled.input`
     border-radius : 10px;
     border : none;
     outline : none;
-
+    font-weight : bold;
+    font-size : 15px
 `
 let Bounce = styled.div`
     /* width : 90%; */
@@ -95,7 +96,7 @@ let count = 0
 let id;
  
 function Searchbar() {
-    const [city, SetCity ] = useState("kadapa")
+    const [city, SetCity ] = useState("Kadapa, Andhra Pradesh")
     const [citydata, SetCityData] = useState([])
 
     const [lat, setLat] = useState(null);
@@ -115,7 +116,7 @@ function Searchbar() {
 
     useEffect(() => {
         let res = cities.filter((ele) => {
-            return (ele.slice(0, city.length).toLowerCase() === city)
+            return ((ele.slice(0, city.length).toLowerCase() === city) || (ele.slice(0, city.length) === city))
         })
             SetDebounceArr(res)
 
@@ -136,18 +137,6 @@ function Searchbar() {
         }
     }
 
-   
-    const getdata = async(e)=>{
-        try{
-            
-            SetCity(e)
-            count = 0
-        }
-        catch(err){
-            console.log(err)
-        }
-    }
-
     const getforcast = async()=>{
         try{
              
@@ -157,42 +146,36 @@ function Searchbar() {
              
             SetForecast(getfor.data.list)
             SetCityData([getfor.data.list[0]])
-            console.log("forcast",forecast)
-            
+            //console.log("forcast",forecast)
         }
         catch(err){
             console.log(err)
         }
     }
-   
 
-    function debounce(func, delay){
-        if(id){
-            clearTimeout(id)
-        }
-        id = setTimeout(()=>{
-            func()
-        },delay)
+    const handleInput = (e) => {
+        SetCity(e.target.value)
+        count = 0
     }
     
-    console.log("citydata",citydata)
-
     let sevendays = []
     forecast.map((e,i,arr) => {
         if(i === 0 || i === 8 || i === 12 || i === 16 || i === 24 || i === 32 || i === 39){
             sevendays.push(e)
         }
     })
-     
-    let week = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
-    console.log("setcity", cityforecast)
-
     
-     const handledisplay = () =>{
+    let week = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+    //console.log("setcity", cityforecast)
+    
+
+    const handledisplay = () =>{
         count = 1
-        console.log(count)
     }
-     
+
+    //console.log("City", city)  
+    //console.log("citydata",citydata)
+    
     return (
         <div style={{paddingTop : "20px"}}>
             <div>
@@ -200,22 +183,23 @@ function Searchbar() {
                     <LocationOnSharp style={{fontSize : "30px"}}/>
                     <Input type="text" 
                        placeholder='Type your city'
-                       onInput = {(e) => debounce(() => (getdata(e.target.value),3000))}
+                       onInput={handleInput} 
+                       value = {city}
                        />
                     <SearchOutlined style={{fontSize : "32px"}}/>
                 </InputDiv>
             </div>
             
-             {count === 0 &&
+            {count === 0 &&
                 <div style={{ height : "200px", width : "91%", overflow : "auto", margin : "auto"}}>
                     {debounceArr.map((e) => (   
-                        <Bounce onClick = {() => (SetCityForecast(e), handledisplay())}>
+                        <Bounce onClick = {() => (SetCityForecast(e),SetCity(e), handledisplay())}>
                         <p>{e}</p>
                         <Bdiv>
                         <LocationOnSharp style={{fontSize : "20px"}}/>
                         </Bdiv>     
                         </Bounce>    
-                        ))}
+                    ))}
                 </div>
             }
             <br />

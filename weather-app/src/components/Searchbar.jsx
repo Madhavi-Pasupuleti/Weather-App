@@ -141,8 +141,6 @@ function Searchbar() {
         try{
              
             let getfor = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${cityforecast}&units=metric&appid=0e91ea9816665abc67fcec0febec0f7b`)
-            
-            //console.log("getcity", getfor.data.city.name)
              
             SetForecast(getfor.data.list)
             SetCityData([getfor.data.list[0]])
@@ -168,7 +166,6 @@ function Searchbar() {
     let week = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
     //console.log("setcity", cityforecast)
     
-
     const handledisplay = () =>{
         count = 1
     }
@@ -193,7 +190,7 @@ function Searchbar() {
             {count === 0 &&
                 <div style={{ height : "200px", width : "91%", overflow : "auto", margin : "auto"}}>
                     {debounceArr.map((e) => (   
-                        <Bounce onClick = {() => (SetCityForecast(e),SetCity(e), handledisplay())}>
+                        <Bounce onClick = {() => (SetCityForecast(e), SetCity(e), handledisplay())}>
                         <p>{e}</p>
                         <Bdiv>
                         <LocationOnSharp style={{fontSize : "20px"}}/>

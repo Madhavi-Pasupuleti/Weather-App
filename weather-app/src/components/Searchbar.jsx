@@ -18,8 +18,6 @@ let InputDiv = styled.div`
     justify-content : space-between;
     background-color : white;
     border : 2px solid skyblue;
-    
-    
     `
 let Input = styled.input`
     width : 95%;
@@ -28,7 +26,8 @@ let Input = styled.input`
     border : none;
     outline : none;
     font-weight : bold;
-    font-size : 15px
+    font-size : 15px;
+    
 `
 let Bounce = styled.div`
     /* width : 90%; */
@@ -55,8 +54,10 @@ let Img = styled.img`
     padding :15px 0px;
 `
 let Days = styled.div`
-    width : 80%;
+    width : 90%;
     margin :auto;
+    background-color : #e6f2fa;
+    border-radius : 3px;
     .weeks{
         display : flex;
         width:100%;
@@ -70,24 +71,43 @@ let Days = styled.div`
     }
     .fcast{
         display : flex;
-        margin-top : -20px;
+        margin-top : -10px;
+        padding-bottom : 10px 20px;
         .fdata{
             width : 20%;
+            transition : all 0.5s ease;
+            border-radius : 2px;
+            cursor: pointer;
+            &:hover{
+                background-color  : #dcebf2;
+                box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+            }
         }
     }
      
      
 `
 let Wraper = styled.div`
-    display : flex;
-    width : 90%;
+    width : 100%;
     margin : auto;
     margin-top : 50px;
+    
     #data{
-        width : 50%;
+        width : 90%;
+        margin : auto;
+        .weather_details{
+            width : 100%;
+            display : flex;
+            justify-content: space-around;
+            h3{
+                background-color : #e6f2fa;
+                padding : 20px 50px;
+                border-radius : 5px;
+            }
+        }
     }
     #map{
-        width : 50%;
+        width : 100%;
     }
     
 ` 
@@ -174,7 +194,7 @@ function Searchbar() {
     //console.log("citydata",citydata)
     
     return (
-        <div style={{paddingTop : "20px"}}>
+        <div style={{paddingTop : "20px", width : "60%", margin : "auto"}}>
             <div>
                 <InputDiv>
                     <LocationOnSharp style={{fontSize : "30px"}}/>
@@ -224,11 +244,20 @@ function Searchbar() {
             </Days>
 
             <Wraper>
+                <div id = "map">
+                    <iframe
+                        src={`https://maps.google.com/maps?q=${cityforecast}=&z=13&ie=UTF8&iwloc=&output=embed`}
+                        border="0" 
+                        width="90%" 
+                        height="450" 
+                        style={{border:"0"}}
+                    ></iframe>
+                </div>
                 <div id="data">
                     <div>
                         {citydata.map((e)=> (
-                            <div>
-                                <h2>Temp : {e.main.temp}°C</h2>
+                            <div className='weather_details'>
+                                <h3>Temp : {e.main.temp}°C</h3>
                                 <h3>Pressure : {e.main.pressure} hpa</h3>
                                 <h3>Humidity : {e.main.humidity}%</h3>
                             </div>
@@ -241,15 +270,6 @@ function Searchbar() {
                         {lat && <p>Latitude: {lat}</p>}
                         {lng && <p>Longitude: {lng}</p>}
                     </div>
-                </div>
-                <div id = "map">
-                    <iframe
-                        src={`https://maps.google.com/maps?q=${cityforecast}=&z=13&ie=UTF8&iwloc=&output=embed`}
-                        border="0" 
-                        width="100%" 
-                        height="450" 
-                        style={{border:"0"}}
-                    ></iframe>
                 </div>
             </Wraper>
 

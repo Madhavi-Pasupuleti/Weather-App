@@ -18,6 +18,7 @@ let InputDiv = styled.div`
     justify-content : space-between;
     background-color : white;
     border : 2px solid skyblue;
+
     `
 let Input = styled.input`
     width : 95%;
@@ -79,7 +80,7 @@ let Days = styled.div`
             border-radius : 2px;
             cursor: pointer;
             &:hover{
-                background-color  : #dcebf2;
+                background-color  : #d7f2f7;
                 box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
             }
         }
@@ -194,7 +195,7 @@ function Searchbar() {
     //console.log("citydata",citydata)
     
     return (
-        <div style={{paddingTop : "20px", width : "60%", margin : "auto"}}>
+        <div style={{paddingTop : "20px", width : "100%", margin : "auto" }}>
             <div>
                 <InputDiv>
                     <LocationOnSharp style={{fontSize : "30px"}}/>

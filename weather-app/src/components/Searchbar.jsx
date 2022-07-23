@@ -130,17 +130,11 @@ function Searchbar() {
     
 
     useEffect(() => {
-    
         getforcast()
-    
     },[cityforecast])
 
     useEffect(() => {
-        let res = cities.filter((ele) => {
-            return ((ele.slice(0, city.length).toLowerCase() === city) || (ele.slice(0, city.length) === city))
-        })
-            SetDebounceArr(res)
-
+       Filterfun()
     },[city])
     
     const getLocation = () => {
@@ -172,8 +166,22 @@ function Searchbar() {
         }
     }
 
-    const handleInput = (e) => {
-        SetCity(e.target.value)
+    const Filterfun = () => {
+        if(id){
+            clearTimeout(id)
+        }
+        id = setTimeout(function(){
+             
+            let res = cities.filter((ele) => {
+                let length = city.length
+                return ((ele.slice(0, length).toLowerCase() === city) || (ele.slice(0, length) === city))
+            })
+            SetDebounceArr(res)
+        },1000)
+    }
+    
+    const handleInput = (ele) => {
+        SetCity(ele)
         count = 0
     }
     
@@ -201,7 +209,7 @@ function Searchbar() {
                     <LocationOnSharp style={{fontSize : "30px"}}/>
                     <Input type="text" 
                        placeholder='Type your city'
-                       onInput={handleInput} 
+                       onInput={(e) => handleInput(e.target.value)} 
                        value = {city}
                        />
                     <SearchOutlined style={{fontSize : "32px"}}/>

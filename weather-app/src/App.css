@@ -4,7 +4,10 @@
   width: 60%;
   background-attachment: fixed;
   margin:auto;
+  margin-top: 30px;
+  border-radius: 3px;
 }
+
 body{
   margin-top: 0px;
   font-weight: 500;

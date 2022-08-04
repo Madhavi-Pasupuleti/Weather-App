@@ -82,9 +82,39 @@ let Days = styled.div`
                 border-radius : 2px;
             }
         }
+    }    
+`
+let Chart = styled.div`
+    width : 90%;
+    margin : auto;
+    border-radius : 3px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+`
+let Temp = styled.div`
+    display : flex;
+    width : 90%;
+    margin : auto;
+    font-size : 20px;
+    align-items : center;
+    img{
+        width : 70px;
+        height : 70px;
+        margin-left : 30px;
     }
-     
-     
+`
+let HP = styled.div`
+   width : 90%;
+   margin : auto;
+   display : flex;
+   justify-content: space-around;
+   h3{
+       background-color : rgb(233, 242, 252);
+       padding : 10px;
+       width : 40%;
+       span{
+        font-weight : lighter
+       }
+   }
 `
 let Wraper = styled.div`
     width : 100%;
@@ -185,55 +215,56 @@ function Searchbar() {
     //console.log("City", city)  
     //console.log("citydata",citydata)
 
-    const data = [
-        {
-          name: '6am',
-          Temp : 20,
-          pv: 2400,
-          amt: 2400,
-        },
-        {
-          name: '9am',
-          Temp : 28,
-          pv: 1398,
-          amt: 2210,
-        },
-        {
-          name: '12pm',
-          Temp : 29,
-          pv: 9800,
-          amt: 2290,
-        },
-        {
-          name: '3pm',
-          Temp : 32,
-          pv: 3908,
-          amt: 2000,
-        },
-        {
-          name: '6pm',
-          Temp : 27,
-          pv: 4800,
-          amt: 2181,
-        },
-        { name: '9pm',
+const data = [
+    {
+        name: '6am',
+        Temp : 20,
+        pv: 2400,
+        amt: 2400,
+    },
+    {
+        name: '9am',
+        Temp : 28,
+        pv: 1398,
+        amt: 2210,
+    },
+    {
+        name: '12pm',
+        Temp : 29,
+        pv: 9800,
+        amt: 2290,
+    },
+    {
+        name: '3pm',
+        Temp : 32,
+        pv: 3908,
+        amt: 2000,
+    },
+    {
+        name: '6pm',
+        Temp : 27,
+        pv: 4800,
+        amt: 2181,
+    },
+    { 
+        name: '9pm',
         Temp : 25,
         pv: 3800,
         amt: 2500,
-      },
-      {
+    },
+    {
         name: '12am',
         Temp : 26,
         pv: 4300,
         amt: 2100,
-      },
-      {
+    },
+    {
         name: '3am',
         Temp : 20,
         pv: 4300,
         amt: 2100,
-      },
-    ];
+    },
+];
     
     
     return (
@@ -280,8 +311,8 @@ function Searchbar() {
                         <div key={ele.id} className= "fdata">
                             <p>{ele.main.temp}°C</p>   
                             <p>{
-                                ele.weather[0].main === "Rain" ? (<Img src="https://cdn-icons-png.flaticon.com/128/4551/4551693.png" />)
-                                : (<Img src = "https://cdn-icons-png.flaticon.com/128/1163/1163573.png"/>)
+                                ele.weather[0].main === "Rain" ? (<Img src="https://cdn-icons-png.flaticon.com/128/826/826957.png" />)
+                                : (<Img src = "https://cdn-icons-png.flaticon.com/128/1146/1146869.png"/>)
                                }
                             </p>
                             <p style={{marginTop:"-30px"}}>{ele.weather[0].main}</p>
@@ -291,7 +322,14 @@ function Searchbar() {
             </Days>
             <br />
             <br />
-            <div>
+            <Chart>
+                {citydata.map((e)=> (
+                    <Temp>
+                        <h1>{e.main.temp}°C</h1>
+                        <img src="https://cdn-icons-png.flaticon.com/128/869/869767.png" />
+                    </Temp>
+                ))} 
+
                 <ResponsiveContainer width="98%" height={400} >
                     <AreaChart
                         width="500px"
@@ -311,17 +349,17 @@ function Searchbar() {
                     <Area type="monotone" dataKey="Temp" stroke="blue" fill="skyblue" />
                     </AreaChart>
                 </ResponsiveContainer>
-            </div>
-
-            <div id="data">
-                {citydata.map((e)=> (
-                <div className='weather_details'>
-                    <h3>Temp : {e.main.temp}°C</h3>
-                    <h3>Pressure : {e.main.pressure} hpa</h3>
-                    <h3>Humidity : {e.main.humidity}%</h3>
+                <div>
+                    {citydata.map((e)=> (
+                    <HP>
+                        <h3>Pressure <br /> <span>{e.main.pressure} hpa</span></h3>
+                        <h3>Humidity <br /> <span>{e.main.humidity}%</span></h3>
+                    </HP>
+                    ))} 
                 </div>
-                ))} 
-            </div>
+                <br />
+            </Chart>
+
 
             <Wraper>
                 <div id = "map">
@@ -333,9 +371,8 @@ function Searchbar() {
                         style={{border:"0"}}
                     ></iframe>
                 </div>
+                <br />
                 <div id="data">
-                    
-                    <br />
                     <div>
                         <button onClick={getLocation} style={{padding  :"5px"}}>Show my location</button>
                         <p>{status}</p>
@@ -344,7 +381,7 @@ function Searchbar() {
                     </div>
                 </div>
             </Wraper>
-
+            <br />
         </div>
     )
 }

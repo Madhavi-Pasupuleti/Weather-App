@@ -5,6 +5,7 @@ import axios from "axios"
 import { useState } from 'react'
 import { useEffect } from 'react';
 import {cities}from "../db"
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 let InputDiv = styled.div`
     width : 90%;
@@ -18,8 +19,8 @@ let InputDiv = styled.div`
     justify-content : space-between;
     background-color : white;
     border : 2px solid skyblue;
-
-    `
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+`
 let Input = styled.input`
     width : 95%;
     height : 40px;
@@ -28,7 +29,6 @@ let Input = styled.input`
     outline : none;
     font-weight : bold;
     font-size : 15px;
-    
 `
 let Bounce = styled.div`
     /* width : 90%; */
@@ -38,7 +38,7 @@ let Bounce = styled.div`
     display : flex;
     justify-content: space-between;
     align-items  : center;
-    border-bottom : 0.5px solid lightgrey;
+    border: 1px solid lightgrey;
     padding : 0px 10px;
     background-color : white;
     cursor: pointer;
@@ -57,8 +57,8 @@ let Img = styled.img`
 let Days = styled.div`
     width : 90%;
     margin :auto;
-    background-color : #e6f2fa;
     border-radius : 3px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     .weeks{
         display : flex;
         width:100%;
@@ -75,13 +75,11 @@ let Days = styled.div`
         margin-top : -10px;
         padding-bottom : 10px 20px;
         .fdata{
-            width : 20%;
-            transition : all 0.5s ease;
-            border-radius : 2px;
+            width : 20%;    
             cursor: pointer;
             &:hover{
-                background-color  : #d7f2f7;
-                box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+                border : 2px solid skyblue; 
+                border-radius : 2px;
             }
         }
     }
@@ -92,21 +90,6 @@ let Wraper = styled.div`
     width : 100%;
     margin : auto;
     margin-top : 50px;
-    
-    #data{
-        width : 90%;
-        margin : auto;
-        .weather_details{
-            width : 100%;
-            display : flex;
-            justify-content: space-around;
-            h3{
-                background-color : #e6f2fa;
-                padding : 20px 50px;
-                border-radius : 5px;
-            }
-        }
-    }
     #map{
         width : 100%;
     }
@@ -159,7 +142,7 @@ function Searchbar() {
              
             SetForecast(getfor.data.list)
             SetCityData([getfor.data.list[0]])
-            //console.log("forcast",forecast)
+            console.log("forcast",forecast)
         }
         catch(err){
             console.log(err)
@@ -201,9 +184,61 @@ function Searchbar() {
 
     //console.log("City", city)  
     //console.log("citydata",citydata)
+
+    const data = [
+        {
+          name: '6am',
+          Temp : 20,
+          pv: 2400,
+          amt: 2400,
+        },
+        {
+          name: '9am',
+          Temp : 28,
+          pv: 1398,
+          amt: 2210,
+        },
+        {
+          name: '12pm',
+          Temp : 29,
+          pv: 9800,
+          amt: 2290,
+        },
+        {
+          name: '3pm',
+          Temp : 32,
+          pv: 3908,
+          amt: 2000,
+        },
+        {
+          name: '6pm',
+          Temp : 27,
+          pv: 4800,
+          amt: 2181,
+        },
+        { name: '9pm',
+        Temp : 25,
+        pv: 3800,
+        amt: 2500,
+      },
+      {
+        name: '12am',
+        Temp : 26,
+        pv: 4300,
+        amt: 2100,
+      },
+      {
+        name: '3am',
+        Temp : 20,
+        pv: 4300,
+        amt: 2100,
+      },
+    ];
+    
     
     return (
         <div style={{paddingTop : "20px", width : "100%", margin : "auto" }}>
+            {/* Input */}
             <div>
                 <InputDiv>
                     <LocationOnSharp style={{fontSize : "30px"}}/>
@@ -216,6 +251,7 @@ function Searchbar() {
                 </InputDiv>
             </div>
             
+            {/* Debouncing */}
             {count === 0 &&
                 <div style={{ height : "200px", width : "91%", overflow : "auto", margin : "auto"}}>
                     {debounceArr.map((e) => (   
@@ -229,6 +265,8 @@ function Searchbar() {
                 </div>
             }
             <br />
+
+            { /* Weekly forecast */ }
             <Days>
                 <div className='weeks'>
                     {week.map((e) => (
@@ -251,6 +289,39 @@ function Searchbar() {
                     ))}
                 </div>
             </Days>
+            <br />
+            <br />
+            <div>
+                <ResponsiveContainer width="98%" height={400} >
+                    <AreaChart
+                        width="500px"
+                        height="100px"
+                        data={data}
+                        margin={{
+                        top: 10,
+                        right: 30,
+                        left: 0,
+                        bottom: 0,
+                        }}
+                    >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area type="monotone" dataKey="Temp" stroke="blue" fill="skyblue" />
+                    </AreaChart>
+                </ResponsiveContainer>
+            </div>
+
+            <div id="data">
+                {citydata.map((e)=> (
+                <div className='weather_details'>
+                    <h3>Temp : {e.main.temp}°C</h3>
+                    <h3>Pressure : {e.main.pressure} hpa</h3>
+                    <h3>Humidity : {e.main.humidity}%</h3>
+                </div>
+                ))} 
+            </div>
 
             <Wraper>
                 <div id = "map">
@@ -263,15 +334,7 @@ function Searchbar() {
                     ></iframe>
                 </div>
                 <div id="data">
-                    <div>
-                        {citydata.map((e)=> (
-                            <div className='weather_details'>
-                                <h3>Temp : {e.main.temp}°C</h3>
-                                <h3>Pressure : {e.main.pressure} hpa</h3>
-                                <h3>Humidity : {e.main.humidity}%</h3>
-                            </div>
-                        ))} 
-                    </div>
+                    
                     <br />
                     <div>
                         <button onClick={getLocation} style={{padding  :"5px"}}>Show my location</button>

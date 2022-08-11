@@ -6,6 +6,9 @@ import { useState } from 'react'
 import { useEffect } from 'react';
 import {cities}from "../db"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import sun from "../images/sun.png";
+import rain from "../images/rain.png";
+import cloud from "../images/cloud.png"
 
 let InputDiv = styled.div`
     width : 90%;
@@ -311,8 +314,8 @@ const data = [
                         <div key={ele.id} className= "fdata">
                             <p>{ele.main.temp}°C</p>   
                             <p>{
-                                ele.weather[0].main === "Rain" ? (<Img src="https://cdn-icons-png.flaticon.com/128/826/826957.png" />)
-                                : (<Img src = "https://cdn-icons-png.flaticon.com/128/1146/1146869.png"/>)
+                                ele.weather[0].main === "Rain" ? (<Img src={rain} />)
+                                : (<Img src = {cloud} />)
                                }
                             </p>
                             <p style={{marginTop:"-30px"}}>{ele.weather[0].main}</p>
@@ -326,7 +329,7 @@ const data = [
                 {citydata.map((e)=> (
                     <Temp>
                         <h1>{e.main.temp}°C</h1>
-                        <img src="https://cdn-icons-png.flaticon.com/128/869/869767.png" />
+                        <img src={sun} />
                     </Temp>
                 ))} 
 
